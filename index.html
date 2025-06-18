@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AskAlex - Ford Parts Lookup</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AskAlex v1.0</title>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-    <header>
-        <img src="askalex_logo.png" alt="AskAlex Logo" class="logo">
-        <h1>AskAlex</h1>
-        <p>Your Ford Parts Lookup Assistant</p>
-    </header>
-    <main>
-        <div class="chat-box">
-            <div id="chat-log"></div>
-            <input type="text" id="user-input" placeholder="Enter VIN or question..." />
-            <button onclick="sendMessage()">Ask</button>
-        </div>
-    </main>
-    <script src="script.js"></script>
+  <header>
+    <img src="askalex_logo.png" alt="AskAlex Logo" class="logo"/>
+    <h1>AskAlex</h1>
+    <p>Ford VIN-Based Parts Lookup</p>
+  </header>
+  <main>
+    <div class="chat-box">
+      <div id="chat-log"></div>
+      <input type="text" id="user-input" placeholder="Enter VIN to get started..." />
+      <button onclick="handleInput()">Submit</button>
+    </div>
+  </main>
+  <script src="script.js"></script>
 </body>
 </html>
