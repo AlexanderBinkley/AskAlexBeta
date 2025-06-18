@@ -9,15 +9,25 @@ function sendMessage() {
     userMsg.textContent = "You: " + message;
     chatLog.appendChild(userMsg);
 
-    // Fake response for now
     const response = document.createElement('div');
-    if (message.length === 17) {
-        response.textContent = "AskAlex: Searching for VIN in FordParts.com and RepairLink...";
+    if (message.length === 17 && /^[A-HJ-NPR-Z0-9]+$/.test(message)) {
+        const fordLink = `https://parts.ford.com/shop/en/us/search?vin=${message}`;
+        const repairLink = `https://repairlinkshop.com/` + 
+                           `Catalog/VinDecode/${message}`;
+        response.innerHTML = `AskAlex: I found links for this VIN:<br>` +
+                             `<a href="${fordLink}" target="_blank">FordParts</a><br>` +
+                             `<a href="${repairLink}" target="_blank">RepairLink</a>`;
+    } else if (/^[0-9A-Za-z\-]+$/.test(message)) {
+        const fordLink = `https://parts.ford.com/shop/en/us/search?keyword=${message}`;
+        const repairLink = `https://repairlinkshop.com/Search/UniversalSearch?SearchTerm=${message}`;
+        response.innerHTML = `AskAlex: Searching for part number...<br>` +
+                             `<a href="${fordLink}" target="_blank">FordParts</a><br>` +
+                             `<a href="${repairLink}" target="_blank">RepairLink</a>`;
     } else {
-        response.textContent = "AskAlex: Let me check that part for you...";
+        response.textContent = "AskAlex: Sorry, I only support VINs and part numbers for now.";
     }
-    chatLog.appendChild(response);
 
+    chatLog.appendChild(response);
     input.value = '';
     chatLog.scrollTop = chatLog.scrollHeight;
 }
