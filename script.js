@@ -24,7 +24,6 @@ async function handleInput() {
       input.value = "";
       chatLog.scrollTop = chatLog.scrollHeight;
 
-      // Call NHTSA API
       const apiURL = `https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVin/${currentVIN}?format=json`;
       const res = await fetch(apiURL);
       const data = await res.json();
@@ -46,14 +45,36 @@ async function handleInput() {
       chatLog.appendChild(response);
     }
   } else if (stage === "part") {
-    const searchTerm = encodeURIComponent(message);
-    const fordURL = `https://parts.ford.com/shop/en/us/search?vin=${currentVIN}&keyword=${searchTerm}`;
-    response.innerHTML = `AskAlex: Here's what I found for "${message}" on your ${decodedVehicle}:<br>
-      Part Number: FAKE-1234<br>
-      List Price: $19.99<br>
-      <a href="${fordURL}" target="_blank">View on FordParts.com</a>`;
+    const partTerm = message;
+    const apiURL = `https://askalex-scraper.alexander32244.repl.co/lookup?vin=${currentVIN}&part=${encodeURIComponent(partTerm)}`;
+
+    const loading = document.createElement("div");
+    loading.textContent = "AskAlex: Searching FordParts.com...";
+    chatLog.appendChild(loading);
+    chatLog.scrollTop = chatLog.scrollHeight;
+
+    try {
+      const res = await fetch(apiURL);
+      const data = await res.json();
+
+      const resultText = data.partNumber === "Not found"
+        ? `I couldn’t find a part number, but here’s the closest match I could find for "${partTerm}":<br>
+           <a href="${data.url}" target="_blank">View on FordParts.com</a>`
+        : `Here's what I found for "${partTerm}" on your ${decodedVehicle}:<br>
+           Part Number: ${data.partNumber}<br>
+           List Price: ${data.price}<br>
+           <a href="${data.url}" target="_blank">View on FordParts.com</a>`;
+
+      const result = document.createElement("div");
+      result.innerHTML = "AskAlex: " + resultText;
+      chatLog.appendChild(result);
+    } catch (e) {
+      const errorMsg = document.createElement("div");
+      errorMsg.textContent = "AskAlex: There was an error contacting the parts lookup system.";
+      chatLog.appendChild(errorMsg);
+    }
+
     stage = "done";
-    chatLog.appendChild(response);
   } else {
     response.textContent = "AskAlex: Restart the page to enter a new VIN.";
     chatLog.appendChild(response);

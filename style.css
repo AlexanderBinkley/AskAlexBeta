@@ -11,9 +11,6 @@ header {
   color: white;
   padding: 1em;
 }
-.logo {
-  height: 50px;
-}
 .chat-box {
   max-width: 600px;
   margin: 2em auto;
